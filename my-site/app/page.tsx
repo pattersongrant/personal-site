@@ -21,8 +21,7 @@ export default function Home() {
           </div>
         </div>
         <div className="sm:w-2/5 ml-auto my-auto">
-          <img className="m-2 hover:drop-shadow-lg hover:text-gold duration-100 mx-auto w-0 sm:min-w-28 sm:w-3/12" src="/tottenham.png" alt="tottenham logo" />
-          <iframe className="w-full h-full rounded-lg" height="500px" src = "https://www.scoreaxis.com/widget/standings-widget/8?autoHeight=1&amp;widgetRows=1%2C1%2C1%2C1%2C1%2C1%2C0%2C1%2C1%2C1&amp;removeBorders=0&amp;header=1&amp;widgetHomeAwayTabs=0&amp;borderColor=%23ffffff&amp;inst=3f7b5"></iframe>
+          <img className="m-2 hover:animate-spin duration-100 mx-auto w-0 sm:min-w-28 sm:size-full" src="/tottenham2.png" alt="tottenham logo" />
         </div>
     </main>
   );
