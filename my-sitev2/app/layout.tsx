@@ -9,10 +9,11 @@ import Footer from './components/footer'
 import { baseUrl } from './sitemap'
 
 export const metadata: Metadata = {
+
   metadataBase: new URL(baseUrl),
   title: {
-    default: 'Next.js Portfolio Starter',
-    template: '%s | Next.js Portfolio Starter',
+    default: 'Grant Patterson',
+    template: '%s | Grant Patterson',
   },
   description: 'This is my portfolio.',
   openGraph: {
@@ -34,6 +35,9 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+  icons: {
+    icon: '/favicon.ico', // This line references the favicon file
+  },
 }
 
 const cx = (...classes) => classes.filter(Boolean).join(' ')
@@ -52,7 +56,11 @@ export default function RootLayout({
         GeistMono.variable
       )}
     >
+      <head>
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+      </head>
       <body className="antialiased max-w-xl mx-4 mt-8 lg:mx-auto">
+        
         <main className="flex-auto min-w-0 mt-6 flex flex-col px-2 md:px-0">
           <Navbar />
           {children}

@@ -14,10 +14,10 @@ export default function Page() {
         <br></br>
         {'Nice to meet you'}
         <br></br>
-        {'Love building, friends, family, reading, gym, playing sports, studying, competition'}
+        {'Love building, friends, family, reading, gym, sports, studying, competition'}
         <br></br>
         {'Hope to do and make some great big things in the world'}
-        <br></br>
+        <br></br><br></br>
         {'Fun fact:'}
         <br></br>
         {'I was born in santa monica, CA.'}
