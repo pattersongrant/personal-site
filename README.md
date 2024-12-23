@@ -1,2 +1,2 @@
 # personal-site
-Personal site
+About me, Blog, and Portfolio
