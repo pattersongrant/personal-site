@@ -1,6 +1,8 @@
 # personal-site
 
-My free domain name expired so I don't host it anymore.
+Finally bought the domain name.
+
+www.pattersongrant.com
 
 About me, Blog, and Portfolio.
 
