@@ -6,9 +6,9 @@ export default function Page() {
       <h1 className="mb-4 text-4xl font-semibold tracking-tighter">
         Grant Patterson
       </h1>
+      <h1 className="text-2xl">Software Engineer &</h1>
+      <h1 className="text-2xl">CS Student at the University of Michigan in Ann Arbor</h1>
       <p className="mb-4">
-        <h1 className="text-2xl">Software Engineer &</h1>
-        <h1 className="text-2xl">CS Student at the University of Michigan in Ann Arbor</h1>
         <br></br>
         {'Nice to meet you!'}
         <br></br>
