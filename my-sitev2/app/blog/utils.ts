@@ -1,5 +1,6 @@
 import fs from 'fs'
 import path from 'path'
+import { marked } from 'marked'
 
 type Metadata = {
   title: string
@@ -40,17 +41,21 @@ function getMDXData(dir) {
   return mdxFiles.map((file) => {
     let { metadata, content } = readMDXFile(path.join(dir, file))
     let slug = path.basename(file, path.extname(file))
+    let html = marked(content)
 
     return {
       metadata,
       slug,
       content,
+      html,
     }
   })
 }
 
 export function getBlogPosts() {
-  return getMDXData(path.join(process.cwd(), 'app', 'blog', 'posts'))
+  const dir = path.join(process.cwd(), 'app', 'blog', 'posts')
+  console.log('Looking for posts in:', dir)
+  return getMDXData(dir)
 }
 
 export function formatDate(date: string, includeRelative = false) {
