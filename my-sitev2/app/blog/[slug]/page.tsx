@@ -4,7 +4,7 @@ import { baseUrl } from 'app/sitemap'
 
 export async function generateStaticParams() {
   const posts = getBlogPosts()
-  console.log('Posts found:', JSON.stringify(posts, null, 2))
+  // console.log('Posts found:', JSON.stringify(posts, null, 2))
 
   return posts.map((post) => ({
     slug: post.slug,

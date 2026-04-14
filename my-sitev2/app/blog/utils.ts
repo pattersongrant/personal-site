@@ -54,7 +54,7 @@ function getMDXData(dir) {
 
 export function getBlogPosts() {
   const dir = path.join(process.cwd(), 'app', 'blog', 'posts')
-  console.log('Looking for posts in:', dir)
+  // console.log('Looking for posts in:', dir)
   return getMDXData(dir)
 }
 
