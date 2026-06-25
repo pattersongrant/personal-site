@@ -1,4 +1,10 @@
-export const socialLinks = [
+type SocialLink = {
+  href: string
+  label: string
+  navLabel?: string
+}
+
+export const socialLinks: SocialLink[] = [
   {
     href: 'https://linkedin.com/in/pattersongrant',
     label: 'linkedin',
@@ -12,4 +18,4 @@ export const socialLinks = [
     label: 'grantpa@umich.edu',
     navLabel: 'email',
   },
-] as const
+]
