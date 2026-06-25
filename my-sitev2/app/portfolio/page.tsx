@@ -15,7 +15,7 @@ export default function Portfolio() {
           <p className="mb-4 text-sm text-neutral-600 dark:text-neutral-400">8.8M+ TikTok views · 200+ downloads · $174 MRR</p>
           <img src="cmaxlogo.png" alt="Charismax logo" className="w-16 h-16 object-cover rounded-lg border border-black dark:border-white mb-3" />
           <img src="charismax.png" alt="Charismax App Store screenshot" className="w-40 rounded-lg border border-black dark:border-white" />
-          <p className="mt-4">An iOS app that uses native speech-to-text and OpenAI text-to-speech to simulate real conversations, then coaches you on how to become more charismatic.</p>
+          <p className="mt-4">An iOS app that uses native speech-to-text and OpenAI text-to-speech + GPT to simulate real conversations, then coaches you on how to become more charismatic.</p>
         </div>
         <div className="mr-8 mb-8 w-40">
           <h2 className="font-medium text-xl">M-Cals</h2>
