@@ -30,7 +30,7 @@
 }
 
 html {
-  min-width: 360px;
+  overflow-x: clip;
 }
 
 .prose .anchor {

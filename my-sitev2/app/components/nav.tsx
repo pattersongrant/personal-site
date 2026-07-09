@@ -14,27 +14,27 @@ const navItems = {
 }
 
 const navLinkClassName =
-  'transition-all hover:text-neutral-800 dark:hover:text-neutral-200 py-1 px-2 m-1'
+  'transition-all hover:text-neutral-800 dark:hover:text-neutral-200 py-1.5 pr-1.5 sm:pr-4 last:pr-0'
 
 const socialLinkClassName =
-  'transition-all text-neutral-600 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200 py-1 px-2 m-1'
+  'transition-all text-neutral-600 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200 py-1.5 whitespace-nowrap'
 
 export function Navbar() {
   return (
-    <aside className="-ml-[8px] mb-10 tracking-tight">
+    <aside className="mb-8 md:mb-10 tracking-tight">
       <div className="lg:sticky lg:top-20">
         <nav
-          className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between w-full relative px-0 pb-0 fade md:relative"
+          className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-2 sm:gap-x-4 w-full"
           id="nav"
         >
-          <div className="flex flex-row flex-wrap items-center">
+          <div className="flex flex-row items-center min-w-0">
             {Object.entries(navItems).map(([path, { name }]) => (
               <Link key={path} href={path} className={navLinkClassName}>
                 {name}
               </Link>
             ))}
           </div>
-          <div className="flex flex-row flex-wrap items-center sm:justify-end">
+          <div className="flex flex-row items-center gap-1.5 sm:gap-4">
             {socialLinks.map(({ href, label, navLabel }) => (
               <a
                 key={href}

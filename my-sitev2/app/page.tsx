@@ -22,7 +22,7 @@ export default function Page() {
       <div className="my-8">
         <BlogPosts />
       </div>
-      <img className="w-2/5"src="/fish.jpeg"></img>
+      <img className="w-full max-w-xs sm:w-2/5" src="/fish.jpeg" alt="Fish" />
     </section>
 
   )
