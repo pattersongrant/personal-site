@@ -25,6 +25,11 @@ export default function Portfolio() {
           <p className="mt-4">An iOS app making calories/macro tracking easier, faster, and more accurate for UMich dining halls with daily menu updates.</p>
         </div>
         <div>
+          <h2 className="font-medium text-xl mb-4">iMessage Insights</h2>
+          <img src="imsg.png" alt="iMessage Insights" className="w-36 h-36 max-sm:max-w-full object-cover rounded-lg border border-black dark:border-white" />
+          <p className="mt-4 w-36 max-sm:w-full">A local Python/Flask web app that analyzes your Mac's iMessage database to show who you text the most and what you talk about.</p>
+        </div>
+        <div>
           <h2 className="font-medium text-xl mb-4">Musicwrap</h2>
           <img src="mwrap.png" alt="Musicwrap" className="w-36 h-36 max-sm:max-w-full object-cover rounded-lg border border-black dark:border-white" />
           <p className="mt-4 w-36 max-sm:w-full">A full-stack web app expanding on native Spotify functionality by allowing users to create shareable and customizable playlist folders.</p>
