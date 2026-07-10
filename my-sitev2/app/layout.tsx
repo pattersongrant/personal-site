@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 // Removed Geist font imports after upgrading Next/React
 import { Navbar } from './components/nav'
 import Footer from './components/footer'
+import { TechBackground } from './components/tech-background'
 import { baseUrl } from './sitemap'
 
 export const metadata: Metadata = {
@@ -52,12 +53,15 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon.ico" type="image/x-icon" />
       </head>
-      <body className="antialiased max-w-xl mx-auto px-5 sm:px-8 mt-6 sm:mt-8">
-        <main className="flex-auto min-w-0 mt-4 sm:mt-6 flex flex-col">
-          <Navbar />
-          {children}
-          <Footer />
-        </main>
+      <body className="relative antialiased">
+        <TechBackground />
+        <div className="relative z-10 max-w-xl mx-auto px-5 sm:px-8 mt-6 sm:mt-8">
+          <main className="flex-auto min-w-0 mt-4 sm:mt-6 flex flex-col">
+            <Navbar />
+            {children}
+            <Footer />
+          </main>
+        </div>
       </body>
     </html>
   )

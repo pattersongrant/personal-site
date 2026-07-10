@@ -33,6 +33,36 @@ html {
   overflow-x: clip;
 }
 
+@keyframes tech-grid-drift {
+  from {
+    background-position: 0 0, 0 0;
+  }
+  to {
+    background-position: 0 48px, 48px 0;
+  }
+}
+
+.tech-bg-grid {
+  background-color: #000;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: 48px 48px;
+  animation: tech-grid-drift 28s linear infinite;
+}
+
+.tech-bg-glow {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.06), transparent 35%),
+    radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.04), transparent 30%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tech-bg-grid {
+    animation: none;
+  }
+}
+
 .prose .anchor {
   @apply absolute invisible no-underline;
 
