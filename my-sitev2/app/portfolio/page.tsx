@@ -16,8 +16,8 @@ export default function Portfolio() {
         <div>
           <h2 className="font-medium text-xl">Charismax</h2>
           <p className="mb-4 text-sm text-neutral-600 dark:text-neutral-400">8.8M+ TikTok views · 200+ downloads · $174 MRR</p>
-          <img src="cmaxlogo.png" alt="Charismax logo" className="w-16 h-16 object-cover rounded-lg border border-black dark:border-white mb-3" />
-          <img src="charismax.png" alt="Charismax App Store screenshot" className="w-40 max-sm:w-full max-sm:max-w-40 rounded-lg border border-black dark:border-white" />
+          <img src="/cmaxlogo.png" alt="Charismax logo" className="w-16 h-16 object-cover rounded-lg border border-black dark:border-white mb-3" />
+          <img src="/charismax.png" alt="Charismax App Store screenshot" className="w-40 max-sm:w-full max-sm:max-w-40 rounded-lg border border-black dark:border-white" />
           <p className="mt-4">An iOS app that uses native speech-to-text and OpenAI text-to-speech + GPT4.1 to simulate real conversations, then coaches you on how to become more charismatic.</p>
         </div>
         <div>
@@ -33,8 +33,8 @@ export default function Portfolio() {
             </a>
           </div>
           <p className="mb-4 text-sm text-neutral-600 dark:text-neutral-400">500+ downloads · 70+ monthly active users</p>
-          <img src="M.png" alt="M-Cals logo" className="w-16 h-16 object-cover rounded-lg border border-black dark:border-white mb-3" />
-          <img src="mcalsscreenshot.png" alt="M-Cals App Store screenshot" className="w-40 max-sm:w-full max-sm:max-w-40 rounded-lg border border-black dark:border-white" />
+          <img src="/M.png" alt="M-Cals logo" className="w-16 h-16 object-cover rounded-lg border border-black dark:border-white mb-3" />
+          <img src="/mcalsscreenshot.png" alt="M-Cals App Store screenshot" className="w-40 max-sm:w-full max-sm:max-w-40 rounded-lg border border-black dark:border-white" />
           <p className="mt-4">An iOS app making calories/macro tracking easier, faster, and more accurate for UMich dining halls with daily menu updates.</p>
         </div>
         <div>
@@ -49,7 +49,7 @@ export default function Portfolio() {
               github
             </a>
           </div>
-          <img src="imsg.png" alt="iMessage Insights" className="w-36 h-36 max-sm:max-w-full object-cover rounded-lg border border-black dark:border-white" />
+          <img src="/imsg.png" alt="iMessage Insights" className="w-36 h-36 max-sm:max-w-full object-cover rounded-lg border border-black dark:border-white" />
           <p className="mt-4 w-36 max-sm:w-full">A local Python/Flask web app that analyzes your Mac's iMessage database to show who you text the most and what you talk about.</p>
         </div>
         <div>
@@ -64,7 +64,7 @@ export default function Portfolio() {
               github
             </a>
           </div>
-          <img src="mwrap.png" alt="Musicwrap" className="w-36 h-36 max-sm:max-w-full object-cover rounded-lg border border-black dark:border-white" />
+          <img src="/mwrap.png" alt="Musicwrap" className="w-36 h-36 max-sm:max-w-full object-cover rounded-lg border border-black dark:border-white" />
           <p className="mt-4 w-36 max-sm:w-full">A full-stack web app expanding on native Spotify functionality by allowing users to create shareable and customizable playlist folders.</p>
         </div>
         <div>
@@ -79,7 +79,7 @@ export default function Portfolio() {
               github
             </a>
           </div>
-          <img src="playlists.png" alt="Playlist Publicizer" className="w-36 h-36 max-sm:max-w-full object-cover rounded-lg border border-black dark:border-white" />
+          <img src="/playlists.png" alt="Playlist Publicizer" className="w-36 h-36 max-sm:max-w-full object-cover rounded-lg border border-black dark:border-white" />
           <p className="mt-4 w-36 max-sm:w-full">A Python script that automatically sets all Spotify playlists to private or public in one click, for users with hundreds of playlists.</p>
         </div>
         <div>
@@ -94,7 +94,7 @@ export default function Portfolio() {
               github
             </a>
           </div>
-          <img src="llmnews.png" alt="llmnewsapp" className="w-36 h-36 max-sm:max-w-full object-cover rounded-lg border border-black dark:border-white" />
+          <img src="/llmnews.png" alt="llmnewsapp" className="w-36 h-36 max-sm:max-w-full object-cover rounded-lg border border-black dark:border-white" />
           <p className="mt-4 w-36 max-sm:w-full">A Llama-3 news chatbot that scrapes the web for up-to-date news and allows users to ask questions for deeper understanding.</p>
         </div>
       </div>

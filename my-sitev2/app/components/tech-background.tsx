@@ -9,12 +9,34 @@ type Particle = {
   vy: number
 }
 
-const PARTICLE_COUNT = 64
+type ThemePalette = {
+  rgb: string
+  particleFill: number
+  particleStroke: number
+  scanPeak: number
+}
+
+const DESKTOP_PARTICLE_COUNT = 64
+const MOBILE_PARTICLE_COUNT = 40
 const CONNECT_DISTANCE = 130
 const MAX_SPEED = 0.28
 const MOUSE_RADIUS = 140
 const MOUSE_FORCE = 0.06
 const MAX_VELOCITY = 1.2
+
+const LIGHT_PALETTE: ThemePalette = {
+  rgb: '0, 0, 0',
+  particleFill: 0.38,
+  particleStroke: 0.1,
+  scanPeak: 0.035,
+}
+
+const DARK_PALETTE: ThemePalette = {
+  rgb: '255, 255, 255',
+  particleFill: 0.55,
+  particleStroke: 0.12,
+  scanPeak: 0.04,
+}
 
 export function TechBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -32,13 +54,24 @@ export function TechBackground() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    const isCoarsePointer = window.matchMedia('(pointer: coarse)').matches
+    const allowPointerInteraction = !isCoarsePointer
+    const colorSchemeQuery = window.matchMedia('(prefers-color-scheme: dark)')
+
     let animationId = 0
     let particles: Particle[] = []
     let scanY = 0
     let mouse = { x: -1000, y: -1000, active: false }
+    let lastWidth = 0
+    let lastHeight = 0
+    let resizeTimeout: ReturnType<typeof setTimeout> | undefined
+    let palette = colorSchemeQuery.matches ? DARK_PALETTE : LIGHT_PALETTE
+
+    const particleCount = () =>
+      window.innerWidth < 640 ? MOBILE_PARTICLE_COUNT : DESKTOP_PARTICLE_COUNT
 
     const applyMouseForces = (particle: Particle) => {
-      if (!mouse.active) return
+      if (!allowPointerInteraction || !mouse.active) return
 
       const dx = particle.x - mouse.x
       const dy = particle.y - mouse.y
@@ -59,7 +92,7 @@ export function TechBackground() {
       }
     }
 
-    const resize = () => {
+    const resizeCanvas = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2)
       canvas.width = window.innerWidth * dpr
       canvas.height = window.innerHeight * dpr
@@ -69,7 +102,7 @@ export function TechBackground() {
     }
 
     const initParticles = () => {
-      particles = Array.from({ length: PARTICLE_COUNT }, () => ({
+      particles = Array.from({ length: particleCount() }, () => ({
         x: Math.random() * window.innerWidth,
         y: Math.random() * window.innerHeight,
         vx: (Math.random() - 0.5) * MAX_SPEED,
@@ -77,9 +110,33 @@ export function TechBackground() {
       }))
     }
 
+    const fitParticlesToViewport = (
+      previousWidth: number,
+      previousHeight: number,
+    ) => {
+      const width = window.innerWidth
+      const height = window.innerHeight
+
+      if (previousWidth === 0 || previousHeight === 0) {
+        initParticles()
+        return
+      }
+
+      const scaleX = width / previousWidth
+      const scaleY = height / previousHeight
+
+      for (const particle of particles) {
+        particle.x *= scaleX
+        particle.y *= scaleY
+        particle.x = Math.max(0, Math.min(width, particle.x))
+        particle.y = Math.max(0, Math.min(height, particle.y))
+      }
+    }
+
     const draw = () => {
       const width = window.innerWidth
       const height = window.innerHeight
+      const { rgb, particleFill, particleStroke, scanPeak } = palette
 
       ctx.clearRect(0, 0, width, height)
 
@@ -109,7 +166,7 @@ export function TechBackground() {
 
           if (distance < CONNECT_DISTANCE) {
             const opacity = (1 - distance / CONNECT_DISTANCE) * 0.22
-            ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`
+            ctx.strokeStyle = `rgba(${rgb}, ${opacity})`
             ctx.lineWidth = 1
             ctx.beginPath()
             ctx.moveTo(particles[i].x, particles[i].y)
@@ -120,12 +177,12 @@ export function TechBackground() {
       }
 
       for (const particle of particles) {
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.55)'
+        ctx.fillStyle = `rgba(${rgb}, ${particleFill})`
         ctx.beginPath()
         ctx.arc(particle.x, particle.y, 1.4, 0, Math.PI * 2)
         ctx.fill()
 
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)'
+        ctx.strokeStyle = `rgba(${rgb}, ${particleStroke})`
         ctx.lineWidth = 1
         ctx.beginPath()
         ctx.moveTo(particle.x - 4, particle.y)
@@ -137,21 +194,41 @@ export function TechBackground() {
 
       scanY = (scanY + 0.6) % (height + 80)
       const gradient = ctx.createLinearGradient(0, scanY - 40, 0, scanY + 40)
-      gradient.addColorStop(0, 'rgba(255, 255, 255, 0)')
-      gradient.addColorStop(0.5, 'rgba(255, 255, 255, 0.04)')
-      gradient.addColorStop(1, 'rgba(255, 255, 255, 0)')
+      gradient.addColorStop(0, `rgba(${rgb}, 0)`)
+      gradient.addColorStop(0.5, `rgba(${rgb}, ${scanPeak})`)
+      gradient.addColorStop(1, `rgba(${rgb}, 0)`)
       ctx.fillStyle = gradient
       ctx.fillRect(0, scanY - 40, width, 80)
 
       animationId = requestAnimationFrame(draw)
     }
 
-    const onResize = () => {
-      resize()
-      initParticles()
+    const handleResize = () => {
+      if (resizeTimeout) clearTimeout(resizeTimeout)
+
+      resizeTimeout = setTimeout(() => {
+        const nextWidth = window.innerWidth
+        const nextHeight = window.innerHeight
+        const widthChanged = Math.abs(nextWidth - lastWidth) > 48
+
+        resizeCanvas()
+        fitParticlesToViewport(lastWidth, lastHeight)
+
+        if (widthChanged) {
+          const targetCount = particleCount()
+          if (particles.length !== targetCount) {
+            initParticles()
+          }
+        }
+
+        lastWidth = nextWidth
+        lastHeight = nextHeight
+      }, 250)
     }
 
     const onMouseMove = (event: MouseEvent) => {
+      if (!allowPointerInteraction) return
+
       mouse.x = event.clientX
       mouse.y = event.clientY
       mouse.active = true
@@ -165,6 +242,8 @@ export function TechBackground() {
     }
 
     const onMouseLeave = () => {
+      if (!allowPointerInteraction) return
+
       mouse.active = false
 
       const grid = gridRef.current
@@ -173,16 +252,28 @@ export function TechBackground() {
       }
     }
 
-    resize()
+    const onColorSchemeChange = (event: MediaQueryListEvent) => {
+      palette = event.matches ? DARK_PALETTE : LIGHT_PALETTE
+    }
+
+    resizeCanvas()
     initParticles()
+    lastWidth = window.innerWidth
+    lastHeight = window.innerHeight
     draw()
-    window.addEventListener('resize', onResize)
-    window.addEventListener('mousemove', onMouseMove)
-    document.documentElement.addEventListener('mouseleave', onMouseLeave)
+
+    window.addEventListener('resize', handleResize)
+    colorSchemeQuery.addEventListener('change', onColorSchemeChange)
+    if (allowPointerInteraction) {
+      window.addEventListener('mousemove', onMouseMove)
+      document.documentElement.addEventListener('mouseleave', onMouseLeave)
+    }
 
     return () => {
       cancelAnimationFrame(animationId)
-      window.removeEventListener('resize', onResize)
+      if (resizeTimeout) clearTimeout(resizeTimeout)
+      window.removeEventListener('resize', handleResize)
+      colorSchemeQuery.removeEventListener('change', onColorSchemeChange)
       window.removeEventListener('mousemove', onMouseMove)
       document.documentElement.removeEventListener('mouseleave', onMouseLeave)
     }
@@ -190,7 +281,7 @@ export function TechBackground() {
 
   return (
     <div
-      className="pointer-events-none fixed inset-0 -z-10 hidden dark:block"
+      className="pointer-events-none fixed inset-0 -z-10"
       aria-hidden
     >
       <div ref={gridRef} className="tech-bg-grid absolute inset-0 transition-transform duration-150 ease-out" />
