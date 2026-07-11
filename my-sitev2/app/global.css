@@ -42,6 +42,12 @@ html {
   }
 }
 
+.tech-bg-blur {
+  filter: blur(1.5px);
+  transform: scale(1.03);
+  transform-origin: center;
+}
+
 .tech-bg-grid {
   background-color: #fff;
   background-image:
@@ -81,6 +87,11 @@ html {
 @media (prefers-reduced-motion: reduce) {
   .tech-bg-grid {
     animation: none;
+  }
+
+  .tech-bg-blur {
+    filter: none;
+    transform: none;
   }
 }
 

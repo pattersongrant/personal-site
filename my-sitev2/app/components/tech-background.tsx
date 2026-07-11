@@ -13,7 +13,6 @@ type ThemePalette = {
   rgb: string
   particleFill: number
   particleStroke: number
-  scanPeak: number
 }
 
 const DESKTOP_PARTICLE_COUNT = 64
@@ -28,14 +27,12 @@ const LIGHT_PALETTE: ThemePalette = {
   rgb: '0, 0, 0',
   particleFill: 0.38,
   particleStroke: 0.1,
-  scanPeak: 0.035,
 }
 
 const DARK_PALETTE: ThemePalette = {
   rgb: '255, 255, 255',
   particleFill: 0.55,
   particleStroke: 0.12,
-  scanPeak: 0.04,
 }
 
 export function TechBackground() {
@@ -60,15 +57,33 @@ export function TechBackground() {
 
     let animationId = 0
     let particles: Particle[] = []
-    let scanY = 0
     let mouse = { x: -1000, y: -1000, active: false }
     let lastWidth = 0
     let lastHeight = 0
     let resizeTimeout: ReturnType<typeof setTimeout> | undefined
     let palette = colorSchemeQuery.matches ? DARK_PALETTE : LIGHT_PALETTE
+    let simulationWidth = window.innerWidth
+    let simulationHeight = window.innerHeight
+
+    const isMobileLayout = () =>
+      isCoarsePointer || window.innerWidth < 640
 
     const particleCount = () =>
       window.innerWidth < 640 ? MOBILE_PARTICLE_COUNT : DESKTOP_PARTICLE_COUNT
+
+    const updateSimulationBounds = () => {
+      const width = window.innerWidth
+      const height = window.innerHeight
+
+      if (isMobileLayout()) {
+        simulationWidth = Math.max(simulationWidth, width)
+        simulationHeight = Math.max(simulationHeight, height)
+        return
+      }
+
+      simulationWidth = width
+      simulationHeight = height
+    }
 
     const applyMouseForces = (particle: Particle) => {
       if (!allowPointerInteraction || !mouse.active) return
@@ -102,9 +117,11 @@ export function TechBackground() {
     }
 
     const initParticles = () => {
+      updateSimulationBounds()
+
       particles = Array.from({ length: particleCount() }, () => ({
-        x: Math.random() * window.innerWidth,
-        y: Math.random() * window.innerHeight,
+        x: Math.random() * simulationWidth,
+        y: Math.random() * simulationHeight,
         vx: (Math.random() - 0.5) * MAX_SPEED,
         vy: (Math.random() - 0.5) * MAX_SPEED,
       }))
@@ -114,31 +131,28 @@ export function TechBackground() {
       previousWidth: number,
       previousHeight: number,
     ) => {
-      const width = window.innerWidth
-      const height = window.innerHeight
-
       if (previousWidth === 0 || previousHeight === 0) {
         initParticles()
         return
       }
 
-      const scaleX = width / previousWidth
-      const scaleY = height / previousHeight
+      const scaleX = simulationWidth / previousWidth
+      const scaleY = simulationHeight / previousHeight
 
       for (const particle of particles) {
         particle.x *= scaleX
         particle.y *= scaleY
-        particle.x = Math.max(0, Math.min(width, particle.x))
-        particle.y = Math.max(0, Math.min(height, particle.y))
+        particle.x = Math.max(0, Math.min(simulationWidth, particle.x))
+        particle.y = Math.max(0, Math.min(simulationHeight, particle.y))
       }
     }
 
     const draw = () => {
-      const width = window.innerWidth
-      const height = window.innerHeight
-      const { rgb, particleFill, particleStroke, scanPeak } = palette
+      const canvasWidth = window.innerWidth
+      const canvasHeight = window.innerHeight
+      const { rgb, particleFill, particleStroke } = palette
 
-      ctx.clearRect(0, 0, width, height)
+      ctx.clearRect(0, 0, canvasWidth, canvasHeight)
 
       for (const particle of particles) {
         applyMouseForces(particle)
@@ -151,11 +165,11 @@ export function TechBackground() {
 
         clampVelocity(particle)
 
-        if (particle.x <= 0 || particle.x >= width) particle.vx *= -1
-        if (particle.y <= 0 || particle.y >= height) particle.vy *= -1
+        if (particle.x <= 0 || particle.x >= simulationWidth) particle.vx *= -1
+        if (particle.y <= 0 || particle.y >= simulationHeight) particle.vy *= -1
 
-        particle.x = Math.max(0, Math.min(width, particle.x))
-        particle.y = Math.max(0, Math.min(height, particle.y))
+        particle.x = Math.max(0, Math.min(simulationWidth, particle.x))
+        particle.y = Math.max(0, Math.min(simulationHeight, particle.y))
       }
 
       for (let i = 0; i < particles.length; i++) {
@@ -192,14 +206,6 @@ export function TechBackground() {
         ctx.stroke()
       }
 
-      scanY = (scanY + 0.6) % (height + 80)
-      const gradient = ctx.createLinearGradient(0, scanY - 40, 0, scanY + 40)
-      gradient.addColorStop(0, `rgba(${rgb}, 0)`)
-      gradient.addColorStop(0.5, `rgba(${rgb}, ${scanPeak})`)
-      gradient.addColorStop(1, `rgba(${rgb}, 0)`)
-      ctx.fillStyle = gradient
-      ctx.fillRect(0, scanY - 40, width, 80)
-
       animationId = requestAnimationFrame(draw)
     }
 
@@ -210,14 +216,28 @@ export function TechBackground() {
         const nextWidth = window.innerWidth
         const nextHeight = window.innerHeight
         const widthChanged = Math.abs(nextWidth - lastWidth) > 48
+        const previousSimulationWidth = simulationWidth
+        const previousSimulationHeight = simulationHeight
 
+        updateSimulationBounds()
         resizeCanvas()
-        fitParticlesToViewport(lastWidth, lastHeight)
 
-        if (widthChanged) {
-          const targetCount = particleCount()
-          if (particles.length !== targetCount) {
-            initParticles()
+        if (isMobileLayout()) {
+          if (widthChanged) {
+            fitParticlesToViewport(previousSimulationWidth, previousSimulationHeight)
+            const targetCount = particleCount()
+            if (particles.length !== targetCount) {
+              initParticles()
+            }
+          }
+        } else {
+          fitParticlesToViewport(lastWidth, lastHeight)
+
+          if (widthChanged) {
+            const targetCount = particleCount()
+            if (particles.length !== targetCount) {
+              initParticles()
+            }
           }
         }
 
@@ -284,9 +304,11 @@ export function TechBackground() {
       className="pointer-events-none fixed inset-0 -z-10"
       aria-hidden
     >
-      <div ref={gridRef} className="tech-bg-grid absolute inset-0 transition-transform duration-150 ease-out" />
-      <canvas ref={canvasRef} className="absolute inset-0 opacity-90" />
-      <div className="tech-bg-glow absolute inset-0" />
+      <div className="tech-bg-blur absolute inset-0">
+        <div ref={gridRef} className="tech-bg-grid absolute inset-0 transition-transform duration-150 ease-out" />
+        <canvas ref={canvasRef} className="absolute inset-0 opacity-90" />
+        <div className="tech-bg-glow absolute inset-0" />
+      </div>
     </div>
   )
 }
