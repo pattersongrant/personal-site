@@ -17,11 +17,16 @@ type ThemePalette = {
 
 const DESKTOP_PARTICLE_COUNT = 64
 const MOBILE_PARTICLE_COUNT = 40
+const DESKTOP_CLUSTER_COUNT = 8
+const MOBILE_CLUSTER_COUNT = 5
+const CLUSTER_RADIUS = 72
 const CONNECT_DISTANCE = 130
 const MAX_SPEED = 0.28
 const MOUSE_RADIUS = 140
 const MOUSE_FORCE = 0.06
 const MAX_VELOCITY = 1.2
+const CONTENT_PADDING = 28
+const CONTENT_FADE_DISTANCE = 56
 
 const LIGHT_PALETTE: ThemePalette = {
   rgb: '0, 0, 0',
@@ -64,6 +69,13 @@ export function TechBackground() {
     let palette = colorSchemeQuery.matches ? DARK_PALETTE : LIGHT_PALETTE
     let simulationWidth = window.innerWidth
     let simulationHeight = window.innerHeight
+    let contentBounds = {
+      left: 0,
+      top: 0,
+      right: 0,
+      bottom: 0,
+      active: false,
+    }
 
     const isMobileLayout = () =>
       isCoarsePointer || window.innerWidth < 640
@@ -83,6 +95,48 @@ export function TechBackground() {
 
       simulationWidth = width
       simulationHeight = height
+    }
+
+    const updateContentBounds = () => {
+      const content = document.getElementById('site-content')
+      if (!content) {
+        contentBounds.active = false
+        return
+      }
+
+      const rect = content.getBoundingClientRect()
+      contentBounds = {
+        left: rect.left - CONTENT_PADDING,
+        top: rect.top - CONTENT_PADDING,
+        right: rect.right + CONTENT_PADDING,
+        bottom: rect.bottom + CONTENT_PADDING,
+        active: true,
+      }
+    }
+
+    const distanceToContentBounds = (x: number, y: number) => {
+      if (!contentBounds.active) return Infinity
+
+      const dx =
+        x < contentBounds.left
+          ? contentBounds.left - x
+          : x > contentBounds.right
+            ? x - contentBounds.right
+            : 0
+      const dy =
+        y < contentBounds.top
+          ? contentBounds.top - y
+          : y > contentBounds.bottom
+            ? y - contentBounds.bottom
+            : 0
+
+      return Math.hypot(dx, dy)
+    }
+
+    const getContentVisibility = (x: number, y: number) => {
+      const distance = distanceToContentBounds(x, y)
+      if (distance >= CONTENT_FADE_DISTANCE) return 1
+      return distance / CONTENT_FADE_DISTANCE
     }
 
     const applyMouseForces = (particle: Particle) => {
@@ -116,15 +170,73 @@ export function TechBackground() {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
     }
 
+    const clusterCount = () =>
+      isMobileLayout() ? MOBILE_CLUSTER_COUNT : DESKTOP_CLUSTER_COUNT
+
+    const createClusterCenters = () => {
+      const count = clusterCount()
+      const paddingX = simulationWidth * 0.12
+      const paddingY = simulationHeight * 0.12
+      const usableWidth = simulationWidth - paddingX * 2
+      const usableHeight = simulationHeight - paddingY * 2
+
+      return Array.from({ length: count }, (_, index) => {
+        const column = index % Math.ceil(Math.sqrt(count))
+        const row = Math.floor(index / Math.ceil(Math.sqrt(count)))
+        const columns = Math.ceil(Math.sqrt(count))
+        const rows = Math.ceil(count / columns)
+        const jitterX = (Math.random() - 0.5) * (usableWidth / columns) * 0.45
+        const jitterY = (Math.random() - 0.5) * (usableHeight / rows) * 0.45
+
+        return {
+          x:
+            paddingX +
+            ((column + 0.5) / columns) * usableWidth +
+            jitterX,
+          y:
+            paddingY +
+            ((row + 0.5) / rows) * usableHeight +
+            jitterY,
+        }
+      })
+    }
+
+    const createParticleNear = (centerX: number, centerY: number): Particle => {
+      const angle = Math.random() * Math.PI * 2
+      const radius = Math.random() * CLUSTER_RADIUS
+
+      return {
+        x: Math.max(
+          0,
+          Math.min(simulationWidth, centerX + Math.cos(angle) * radius),
+        ),
+        y: Math.max(
+          0,
+          Math.min(simulationHeight, centerY + Math.sin(angle) * radius),
+        ),
+        vx: (Math.random() - 0.5) * MAX_SPEED,
+        vy: (Math.random() - 0.5) * MAX_SPEED,
+      }
+    }
+
     const initParticles = () => {
       updateSimulationBounds()
 
-      particles = Array.from({ length: particleCount() }, () => ({
-        x: Math.random() * simulationWidth,
-        y: Math.random() * simulationHeight,
-        vx: (Math.random() - 0.5) * MAX_SPEED,
-        vy: (Math.random() - 0.5) * MAX_SPEED,
-      }))
+      const count = particleCount()
+      const centers = createClusterCenters()
+      const particlesPerCluster = Math.ceil(count / centers.length)
+
+      particles = []
+
+      for (const center of centers) {
+        for (
+          let index = 0;
+          index < particlesPerCluster && particles.length < count;
+          index += 1
+        ) {
+          particles.push(createParticleNear(center.x, center.y))
+        }
+      }
     }
 
     const fitParticlesToViewport = (
@@ -152,7 +264,12 @@ export function TechBackground() {
       const canvasHeight = window.innerHeight
       const { rgb, particleFill, particleStroke } = palette
 
+      updateContentBounds()
       ctx.clearRect(0, 0, canvasWidth, canvasHeight)
+
+      const particleVisibility = particles.map((particle) =>
+        getContentVisibility(particle.x, particle.y),
+      )
 
       for (const particle of particles) {
         applyMouseForces(particle)
@@ -179,7 +296,14 @@ export function TechBackground() {
           const distance = Math.hypot(dx, dy)
 
           if (distance < CONNECT_DISTANCE) {
-            const opacity = (1 - distance / CONNECT_DISTANCE) * 0.22
+            const lineVisibility = Math.min(
+              particleVisibility[i],
+              particleVisibility[j],
+            )
+            if (lineVisibility <= 0) continue
+
+            const opacity =
+              (1 - distance / CONNECT_DISTANCE) * 0.22 * lineVisibility
             ctx.strokeStyle = `rgba(${rgb}, ${opacity})`
             ctx.lineWidth = 1
             ctx.beginPath()
@@ -190,13 +314,17 @@ export function TechBackground() {
         }
       }
 
-      for (const particle of particles) {
-        ctx.fillStyle = `rgba(${rgb}, ${particleFill})`
+      for (let index = 0; index < particles.length; index += 1) {
+        const particle = particles[index]
+        const visibility = particleVisibility[index]
+        if (visibility <= 0) continue
+
+        ctx.fillStyle = `rgba(${rgb}, ${particleFill * visibility})`
         ctx.beginPath()
         ctx.arc(particle.x, particle.y, 1.4, 0, Math.PI * 2)
         ctx.fill()
 
-        ctx.strokeStyle = `rgba(${rgb}, ${particleStroke})`
+        ctx.strokeStyle = `rgba(${rgb}, ${particleStroke * visibility})`
         ctx.lineWidth = 1
         ctx.beginPath()
         ctx.moveTo(particle.x - 4, particle.y)
@@ -283,6 +411,7 @@ export function TechBackground() {
     draw()
 
     window.addEventListener('resize', handleResize)
+    window.addEventListener('scroll', updateContentBounds, { passive: true })
     colorSchemeQuery.addEventListener('change', onColorSchemeChange)
     if (allowPointerInteraction) {
       window.addEventListener('mousemove', onMouseMove)
@@ -293,6 +422,7 @@ export function TechBackground() {
       cancelAnimationFrame(animationId)
       if (resizeTimeout) clearTimeout(resizeTimeout)
       window.removeEventListener('resize', handleResize)
+      window.removeEventListener('scroll', updateContentBounds)
       colorSchemeQuery.removeEventListener('change', onColorSchemeChange)
       window.removeEventListener('mousemove', onMouseMove)
       document.documentElement.removeEventListener('mouseleave', onMouseLeave)
@@ -304,11 +434,8 @@ export function TechBackground() {
       className="pointer-events-none fixed inset-0 -z-10"
       aria-hidden
     >
-      <div className="tech-bg-blur absolute inset-0">
-        <div ref={gridRef} className="tech-bg-grid absolute inset-0 transition-transform duration-150 ease-out" />
-        <canvas ref={canvasRef} className="absolute inset-0 opacity-90" />
-        <div className="tech-bg-glow absolute inset-0" />
-      </div>
+      <div ref={gridRef} className="tech-bg-grid absolute inset-0 transition-transform duration-150 ease-out" />
+      <canvas ref={canvasRef} className="absolute inset-0 opacity-90" />
     </div>
   )
 }
