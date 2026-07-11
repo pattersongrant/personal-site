@@ -55,10 +55,7 @@ export default function RootLayout({
       </head>
       <body className="relative antialiased">
         <TechBackground />
-        <div
-          id="site-content"
-          className="relative z-10 max-w-xl mx-auto px-5 sm:px-8 mt-6 sm:mt-8"
-        >
+        <div className="relative z-10 max-w-xl mx-auto px-5 sm:px-8 mt-6 sm:mt-8">
           <main className="flex-auto min-w-0 mt-4 sm:mt-6 flex flex-col">
             <Navbar />
             {children}

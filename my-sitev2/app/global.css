@@ -45,24 +45,35 @@ html {
 .tech-bg-grid {
   background-color: #fff;
   background-image:
-    linear-gradient(rgba(0, 0, 0, 0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
+    linear-gradient(rgba(0, 0, 0, 0.075) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.075) 1px, transparent 1px);
   background-size: 48px 48px;
-  animation: tech-grid-drift 28s linear infinite;
+  animation: tech-grid-drift 32s linear infinite;
 }
 
 @media (prefers-color-scheme: dark) {
   .tech-bg-grid {
     background-color: #000;
     background-image:
-      linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+      linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
   }
 }
 
 @media (max-width: 639px) {
   .tech-bg-grid {
+    background-image:
+      linear-gradient(rgba(0, 0, 0, 0.09) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 0, 0, 0.09) 1px, transparent 1px);
     animation-duration: 40s;
+  }
+}
+
+@media (max-width: 639px) and (prefers-color-scheme: dark) {
+  .tech-bg-grid {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.075) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.075) 1px, transparent 1px);
   }
 }
 
