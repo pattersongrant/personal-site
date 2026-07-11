@@ -22,10 +22,12 @@ const DESKTOP_CLUSTER_COUNT = 9
 const MOBILE_CLUSTER_COUNT = 6
 const CLUSTER_RADIUS = 72
 const CONNECT_DISTANCE = 130
-const MAX_SPEED = 0.26
+const MAX_SPEED = 0.42
+const MIN_SPEED = 0.12
+const DRIFT = 0.006
 const MOUSE_RADIUS = 140
 const MOUSE_FORCE = 0.05
-const MAX_VELOCITY = 1
+const MAX_VELOCITY = 1.35
 
 const LIGHT_PALETTE: ThemePalette = {
   rgb: '0, 0, 0',
@@ -113,7 +115,23 @@ export function TechBackground() {
     }
 
     const clampVelocity = (particle: Particle) => {
-      const speed = Math.hypot(particle.vx, particle.vy)
+      particle.vx += (Math.random() - 0.5) * DRIFT
+      particle.vy += (Math.random() - 0.5) * DRIFT
+
+      let speed = Math.hypot(particle.vx, particle.vy)
+
+      if (speed < MIN_SPEED) {
+        if (speed === 0) {
+          const angle = Math.random() * Math.PI * 2
+          particle.vx = Math.cos(angle) * MIN_SPEED
+          particle.vy = Math.sin(angle) * MIN_SPEED
+        } else {
+          particle.vx = (particle.vx / speed) * MIN_SPEED
+          particle.vy = (particle.vy / speed) * MIN_SPEED
+        }
+        speed = MIN_SPEED
+      }
+
       if (speed > MAX_VELOCITY) {
         particle.vx = (particle.vx / speed) * MAX_VELOCITY
         particle.vy = (particle.vy / speed) * MAX_VELOCITY
@@ -217,8 +235,8 @@ export function TechBackground() {
         particle.x += particle.vx
         particle.y += particle.vy
 
-        particle.vx *= 0.986
-        particle.vy *= 0.986
+        particle.vx *= 0.993
+        particle.vy *= 0.993
 
         clampVelocity(particle)
 
