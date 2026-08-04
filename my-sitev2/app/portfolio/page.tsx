@@ -38,6 +38,13 @@ export default function Portfolio() {
           <p className="mt-4">An iOS app making calories/macro tracking easier, faster, and more accurate for UMich dining halls with daily menu updates.</p>
         </div>
         <div>
+          <h2 className="font-medium text-xl">Lighthome</h2>
+          <p className="mb-4 text-sm text-neutral-600 dark:text-neutral-400">2M+ TikTok Views · Recently Launched</p>
+          <img src="/lighthomelogo.png" alt="Lighthome logo" className="w-16 h-16 object-cover rounded-lg border border-black dark:border-white mb-3" />
+          <img src="/lighthomess.png" alt="Lighthome App Store screenshot" className="w-40 max-sm:w-full max-sm:max-w-40 rounded-lg border border-black dark:border-white" />
+          <p className="mt-4">An iOS breakup recovery app with a personalized path of lessons, quizzes, and tasks, plus a no-contact tracker, journaling, and an AI coach. Built with RevenueCat, AWS, and OpenAI.</p>
+        </div>
+        <div>
           <div className="flex items-baseline gap-2 mb-4">
             <h2 className="font-medium text-xl">iMessage Insights</h2>
             <a
@@ -96,6 +103,21 @@ export default function Portfolio() {
           </div>
           <img src="/llmnews.png" alt="llmnewsapp" className="w-36 h-36 max-sm:max-w-full object-cover rounded-lg border border-black dark:border-white" />
           <p className="mt-4 w-36 max-sm:w-full">A Llama-3 news chatbot that scrapes the web for up-to-date news and allows users to ask questions for deeper understanding.</p>
+        </div>
+        <div>
+          <div className="flex items-baseline gap-2 mb-4">
+            <h2 className="font-medium text-xl">Volume Booster</h2>
+            <a
+              href="https://github.com/pattersongrant/volume-booster"
+              className={githubLinkClassName}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              github
+            </a>
+          </div>
+          <img src="/volume.png" alt="Volume Booster" className="w-full max-w-sm rounded-lg border border-black dark:border-white" />
+          <p className="mt-4 max-w-sm">A macOS GUI for adjusting an MP4's audio volume, listening to the result, and exporting it. Video is copied without re-encoding; audio is saved as lossless ALAC.</p>
         </div>
       </div>
       <h3 className="font-medium text-16 mb-8 mt-8 tracking-tighter">And more! Check out my GitHub!</h3>
