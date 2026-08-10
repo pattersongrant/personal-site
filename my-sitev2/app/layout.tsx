@@ -48,7 +48,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cx('text-black bg-white dark:text-white dark:bg-black')}
+      className={cx('dark text-white bg-black')}
     >
       <head>
         <link rel="icon" href="/favicon.ico" type="image/x-icon" />

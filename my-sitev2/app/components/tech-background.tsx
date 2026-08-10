@@ -29,13 +29,6 @@ const MOUSE_RADIUS = 140
 const MOUSE_FORCE = 0.05
 const MAX_VELOCITY = 1.35
 
-const LIGHT_PALETTE: ThemePalette = {
-  rgb: '0, 0, 0',
-  lineStrength: 0.14,
-  particleFill: 0.34,
-  particleStroke: 0.09,
-}
-
 const DARK_PALETTE: ThemePalette = {
   rgb: '255, 255, 255',
   lineStrength: 0.17,
@@ -63,7 +56,6 @@ export function TechBackground() {
 
     const isCoarsePointer = window.matchMedia('(pointer: coarse)').matches
     const allowPointerInteraction = !isCoarsePointer
-    const colorSchemeQuery = window.matchMedia('(prefers-color-scheme: dark)')
 
     let animationId = 0
     let particles: Particle[] = []
@@ -71,7 +63,7 @@ export function TechBackground() {
     let lastWidth = 0
     let lastHeight = 0
     let resizeTimeout: ReturnType<typeof setTimeout> | undefined
-    let palette = colorSchemeQuery.matches ? DARK_PALETTE : LIGHT_PALETTE
+    const palette = DARK_PALETTE
     let simulationWidth = window.innerWidth
     let simulationHeight = window.innerHeight
 
@@ -344,10 +336,6 @@ export function TechBackground() {
       }
     }
 
-    const onColorSchemeChange = (event: MediaQueryListEvent) => {
-      palette = event.matches ? DARK_PALETTE : LIGHT_PALETTE
-    }
-
     resizeCanvas()
     initParticles()
     lastWidth = window.innerWidth
@@ -355,7 +343,6 @@ export function TechBackground() {
     draw()
 
     window.addEventListener('resize', handleResize)
-    colorSchemeQuery.addEventListener('change', onColorSchemeChange)
     if (allowPointerInteraction) {
       window.addEventListener('mousemove', onMouseMove)
       document.documentElement.addEventListener('mouseleave', onMouseLeave)
@@ -365,7 +352,6 @@ export function TechBackground() {
       cancelAnimationFrame(animationId)
       if (resizeTimeout) clearTimeout(resizeTimeout)
       window.removeEventListener('resize', handleResize)
-      colorSchemeQuery.removeEventListener('change', onColorSchemeChange)
       window.removeEventListener('mousemove', onMouseMove)
       document.documentElement.removeEventListener('mouseleave', onMouseLeave)
     }
