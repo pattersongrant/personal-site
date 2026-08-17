@@ -14,10 +14,10 @@ const navItems = {
 }
 
 const navLinkClassName =
-  'transition-all hover:text-neutral-800 dark:hover:text-neutral-200 py-1.5 pr-1.5 sm:pr-4 last:pr-0'
+  'transition-all hover:text-neutral-200 py-1.5 pr-1.5 sm:pr-4 last:pr-0'
 
 const socialLinkClassName =
-  'transition-all text-neutral-600 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200 py-1.5 whitespace-nowrap'
+  'transition-all text-neutral-400 hover:text-neutral-200 py-1.5 whitespace-nowrap'
 
 export function Navbar() {
   return (
