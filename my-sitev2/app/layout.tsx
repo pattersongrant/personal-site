@@ -1,6 +1,7 @@
 import './global.css'
 import type { Metadata } from 'next'
 // Removed Geist font imports after upgrading Next/React
+import { Analytics } from '@vercel/analytics/next'
 import { Navbar } from './components/nav'
 import Footer from './components/footer'
 import { TechBackground } from './components/tech-background'
@@ -62,6 +63,7 @@ export default function RootLayout({
             <Footer />
           </main>
         </div>
+        <Analytics />
       </body>
     </html>
   )
