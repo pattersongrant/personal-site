@@ -32,14 +32,30 @@ export default function Portfolio() {
               github
             </a>
           </div>
-          <p className="mb-4 text-sm text-neutral-400">500+ downloads · 70+ monthly active users</p>
+          <p className="mb-4 text-sm text-neutral-400">600+ downloads · 70+ monthly active users</p>
           <img src="/M.png" alt="M-Cals logo" className="w-16 h-16 object-cover rounded-lg border border-white mb-3" />
           <img src="/mcalsscreenshot.png" alt="M-Cals App Store screenshot" className="w-40 max-sm:w-full max-sm:max-w-40 rounded-lg border border-white" />
           <p className="mt-4">An iOS app making calories/macro tracking easier, faster, and more accurate for UMich dining halls with daily menu updates.</p>
         </div>
         <div>
+          <div className="flex items-baseline gap-2">
+            <h2 className="font-medium text-xl">Atrakto</h2>
+            <a
+              href="https://atrakto.com"
+              className={githubLinkClassName}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              atrakto.com
+            </a>
+          </div>
+          <p className="mb-4 text-sm text-neutral-400">3,000+ page visits in first week · Paying customers</p>
+          <img src="/atrakto.png" alt="Atrakto social audience visualization" className="w-40 max-sm:w-full max-sm:max-w-40 rounded-lg border border-white" />
+          <p className="mt-4">An OpenAI-powered, full-stack web app for optimizing social media marketing, built with Next.js/Typescript and deployed on Cloudflare.</p>
+        </div>
+        <div>
           <h2 className="font-medium text-xl">Lighthome</h2>
-          <p className="mb-4 text-sm text-neutral-400">2M+ TikTok Views · Recently Launched</p>
+          <p className="mb-4 text-sm text-neutral-400">2M+ TikTok Views</p>
           <img src="/lighthomelogo.png" alt="Lighthome logo" className="w-16 h-16 object-cover rounded-lg border border-white mb-3" />
           <img src="/lighthomess.png" alt="Lighthome App Store screenshot" className="w-40 max-sm:w-full max-sm:max-w-40 rounded-lg border border-white" />
           <p className="mt-4">An iOS breakup recovery app with a personalized path of lessons, quizzes, and tasks, plus a no-contact tracker, journaling, and an AI coach. Built with RevenueCat, AWS, and OpenAI.</p>
