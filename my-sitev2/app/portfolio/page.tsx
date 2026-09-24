@@ -54,6 +54,21 @@ export default function Portfolio() {
           <p className="mt-4">An OpenAI-powered, full-stack web app for optimizing social media marketing, built with Next.js/Typescript and deployed on Cloudflare.</p>
         </div>
         <div>
+          <div className="mb-4">
+            <h2 className="font-medium text-xl">Practests</h2>
+            <a
+              href="https://practests.com"
+              className={`block ${githubLinkClassName}`}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              practests.com
+            </a>
+          </div>
+          <img src="/practests.png" alt="Practests building a practice test from study notes" className="w-full max-w-xs rounded-lg border border-white" />
+          <p className="mt-4">A GPT-powered app that turns study notes into practice tests, with a Vite frontend, Stripe payments, and Cloudflare hosting.</p>
+        </div>
+        <div>
           <h2 className="font-medium text-xl">Lighthome</h2>
           <p className="mb-4 text-sm text-neutral-400">2M+ TikTok Views</p>
           <img src="/lighthomelogo.png" alt="Lighthome logo" className="w-16 h-16 object-cover rounded-lg border border-white mb-3" />
